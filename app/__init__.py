@@ -13,4 +13,4 @@ migrate = Migrate(app, db)
 # login.login_view = 'login'
 
 
-from app import models
+from app import models, routes

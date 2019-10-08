@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if title %}
+    <title>{{ title }} | Terminal</title>
+    {% else %}
+    <title>Welcome to Terminal</title>
+    {% endif %}
+    </head>
+    <body>
+        <div>Terminal:
+            <a href="{{ url_for('settings') }}">Settings</a>
+        </div>
+        <hr>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
