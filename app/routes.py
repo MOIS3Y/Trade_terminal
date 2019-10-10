@@ -16,7 +16,7 @@ def index():
     return render_template('index.html', title='Index')
 
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET', 'POST'])
 def settings():
     form = SettingsForm()
     return render_template('settings.html', title='Settings', form=form)
