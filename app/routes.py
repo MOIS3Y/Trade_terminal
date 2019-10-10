@@ -13,10 +13,10 @@ from app.forms import SettingsForm
 
 @app.route('/')
 def index():
-    return 'Hello world!'
+    return render_template('index.html', title='Index')
 
 
 @app.route('/settings')
 def settings():
     form = SettingsForm()
-    return render_template('settings.html',title='Settings', form=form)
+    return render_template('settings.html', title='Settings', form=form)
