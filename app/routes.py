@@ -20,3 +20,8 @@ def index():
 def settings():
     form = SettingsForm()
     return render_template('settings.html', title='Settings', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('login.html', title='Sign In')
