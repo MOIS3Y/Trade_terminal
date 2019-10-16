@@ -1,1 +1,43 @@
 {% extends "base.html" %}
+
+
+
+
+{% block settings %}
+
+<div class="col-md-6">
+    <form action="{{ url_for('settings') }}" method="POST">
+
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label(class='control-label') }}
+                {{ field(class='form-control') }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+
+{# only flask form #}
+{#     <form action="" method="post">
+            {{ form.hidden_tag() }}
+        <p>
+            {{ form.secret_key.label(class='control-label') }}<br>
+            {{ form.secret_key(class='form-control') }}<br>
+            {% for error in form.secret_key.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        <p>
+            {{ form.public_key.label(class='control-label') }}<br>
+            {{ form.public_key(class='form-control') }}<br>
+            {% for error in form.secret_key.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.submit(class="btn btn-success") }}
+            </form>
+ #}
+</div>
+
+
+
+{% endblock %}

@@ -34,4 +34,4 @@ class SettingsForm(FlaskForm):
     """docstring for EditProfileForm"""
     secret_key = StringField('Secret key:', validators=[DataRequired()])
     public_key = StringField('Public key:', validators=[DataRequired()])
-    submit = SubmitField('Add')
+    # submit = SubmitField('Add')
