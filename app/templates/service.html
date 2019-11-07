@@ -1,0 +1,7 @@
+<div class="col mb-3 ml-3 list-group list-group-flush" id="response">
+    <!-- Button trigger modal -->
+    {% for acc in privat_settings %}
+    <a class="list-group-item list-group-item-action" data-toggle="modal" data-target="#exampleModal">{{ acc.name }}
+    </a>
+    {% endfor %}
+</div>

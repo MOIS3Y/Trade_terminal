@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
@@ -32,6 +33,8 @@ class RegistrationForm(FlaskForm):
 
 class SettingsForm(FlaskForm):
     """docstring for EditProfileForm"""
+    select = SelectField('Exchanges', choices=[], coerce=int)
+    name = StringField('Name:', validators=[DataRequired()])
     secret_key = StringField('Secret key:', validators=[DataRequired()])
     public_key = StringField('Public key:', validators=[DataRequired()])
     submit = SubmitField('Add')

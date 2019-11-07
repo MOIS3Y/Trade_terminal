@@ -1,28 +1,126 @@
 {% extends "base.html" %}
 
-
-
-
-
 {% block settings %}
 
-<div class="col-md-6">
-    <form action="{{ url_for('settings') }}" method="POST">
-        {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.secret_key.label(class='control-label') }}<br>
-                {{ form.secret_key(class='form-control') }}<br>
-                    {% for error in form.secret_key.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
+
+<div class="container mt-5">
+    <div class="row justify-content-between">
+        <div class="col-md pt-3 mb-3 mr-md-3 shadow bg-white rounded">
+            <h5>User Settings</h5>
+            <hr>
+        </div>
+        <div class="col-md pt-3 mb-3 shadow bg-white rounded">
+            <h5>Exchange accounts</h5>
+            <hr>
+            <div class="row">
+                <div class="col mb-3 ml-3 list-group list-group-flush" id="response">
+                    <!-- Button trigger modal -->
+                    {% for acc in privat_settings %}
+                        <a class="list-group-item list-group-item-action" data-toggle="modal" data-target="#exampleModal">{{ acc.name }}
+                        </a>      
                     {% endfor %}
-                {{ form.public_key.label(class='control-label') }}<br>
-                {{ form.public_key(class='form-control') }}<br>
-                    {% for error in form.secret_key.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                {{ form.submit(class="btn btn-success") }}
+                    
+                </div>
+
+                </div>
+                            <h5>Add accounts</h5>
+                            <hr>
+                            <div class="form-row">
+                                <div class="col">
+                                    <form class="needs-validation" action="{{ url_for('settings') }}" method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="form-row">
+                            <div class="col">
+{#                                 <select name="exchange" class="custom-select custom-select-sm mp-sm-2" required>
+                                    <option value="">Exchanges</option>
+                                    {% for exchange in exchanges %}
+                                        <option value="{{ exchange.id }}">{{ exchange.name }}</option>
+                                    {% endfor %}  
+                                </select>
+                            <div class="invalid-feedback mb-2">Change Exchange</div> #}
+                                {{ form.select(class="custom-select custom-select-sm mp-sm-2 mb-3") }}
+                            </div>
+                            <div class="col">
+                                {{ form.name(class='col form-control form-control-sm mb-3', placeholder="Name") }}
+                            </div>
+                        </div>
+                        {{ form.secret_key.label(class='control-label') }}
+                        {{ form.secret_key(class='form-control form-control-sm mb-3') }}
+                        <div class="invalid-feedback mb-2">Change Exchange</div>
+                        {{ form.public_key.label(class='control-label') }}
+                        {{ form.public_key(class='form-control form-control-sm mb-3') }}
+                        {{ form.submit(class="btn btn-sm btn-success mb-3", id="btn") }}
+                        {# <button class="btn btn-danger", id="btn">Update</button> #}
+
+                    </form>
+                </div>
             </div>
-    </form>
+        </div>
+    </div>
 </div>
 
+{# <p>{{ current_user.id }}</p> #}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{# <script>
+    $(document).ready( function() { 
+        $('#next').click(function() {
+           $.ajax("{{ url_for('_update') }}").done(function (reply) {
+              $('#exacc').html(reply);
+           });
+        });
+    });
+</script> #}
+{# <script>
+    
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+    
+</script> #}
+
+
+<!-- Optional JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="{{ url_for('static', filename='js/form.js') }}"></script>
 {% endblock %}
+
+

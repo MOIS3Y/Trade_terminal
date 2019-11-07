@@ -38,12 +38,15 @@ class PrivatSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     exchange_id = db.Column(db.Integer, db.ForeignKey('exchange.id'))
+    name = db.Column(db.String(12))
     secret_key = db.Column(db.String(128))
     public_key = db.Column(db.String(128))
 
     def __repr__(self):
-        return '<User: {}, Exchange:{}, SK: {}, PK: {},>'.format(
-            self.user_id, self.exchange_id, self.secret_key, self.public_key)
+        return '<User: {}, Exchange:{}, SK: {}, PK: {}, Name: {}>'.format(
+            self.user_id, self.exchange_id,
+            self.secret_key, self.public_key,
+            self.name)
 
 
 @login.user_loader

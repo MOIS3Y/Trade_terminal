@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import request
 from werkzeug.urls import url_parse
@@ -9,6 +9,7 @@ from app.models import User
 from app.forms import LoginForm
 from app.forms import RegistrationForm
 from app.forms import SettingsForm
+from app.models import Exchange, PrivatSettings
 
 
 @app.route('/')
@@ -18,9 +19,41 @@ def index():
 
 
 @app.route('/settings', methods=['GET', 'POST'])
+@login_required
 def settings():
+    # select = request.form.get('exchange')
+    exchanges = Exchange.query.all()
     form = SettingsForm()
-    return render_template('settings.html', title='Settings', form=form)
+    form.select.choices = [(exchange.id, exchange.name) for exchange in exchanges]
+    flash(form.select.choices)
+    flash(form.validate_on_submit())
+    if current_user.is_authenticated:
+        pass
+
+    if form.validate_on_submit():
+        new_settings = PrivatSettings(
+            user_id=current_user.id, exchange_id=form.select.data, name=form.name.data,
+            secret_key=form.secret_key.data, public_key=form.public_key.data)
+        flash(new_settings)
+        db.session.add(new_settings)
+        db.session.commit()
+        flash('Смотри новые данные в базе!')
+
+    privat_settings = PrivatSettings.query.filter_by(user_id=current_user.id).all()
+    flash(privat_settings)
+
+    return render_template(
+        'settings.html',
+        title='Settings',
+        form=form,
+        exchanges=exchanges,
+        privat_settings=privat_settings)
+
+
+@app.route('/service', methods=['POST'])
+def _update():
+    privat_settings = PrivatSettings.query.filter_by(user_id=current_user.id).all()
+    return jsonify({'data': render_template('service.html', privat_settings=privat_settings)})
 
 
 @app.route('/login', methods=['GET', 'POST'])
