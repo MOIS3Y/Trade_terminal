@@ -10,8 +10,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    privat_settings = db.relationship(
-        'PrivatSettings', backref=db.backref('users'), lazy=True)
+    private_settings = db.relationship(
+        'PrivateSettings', backref=db.backref('users'), lazy=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -27,14 +27,15 @@ class Exchange(db.Model):
     """docstring for Exchange"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), index=True, unique=True)
-    privat_settings = db.relationship('PrivatSettings', lazy=True)
+    private_settings = db.relationship(
+        'PrivateSettings', backref=db.backref('exchange'), lazy=True)
 
     def __repr__(self):
         return '<Exchange {}>'.format(self.name)
 
 
-class PrivatSettings(db.Model):
-    """docstring for PrivatSettings"""
+class PrivateSettings(db.Model):
+    """docstring for PrivateSettings"""
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     exchange_id = db.Column(db.Integer, db.ForeignKey('exchange.id'))

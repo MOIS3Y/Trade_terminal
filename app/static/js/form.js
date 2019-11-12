@@ -1,17 +1,3 @@
-// Update Exchange Accounts div 
-$(document).ready(function() {
-    $('#btn').click(function() { setTimeout(function() {
-        $.ajax({
-            url: "/service",
-            type: "POST",
-            success: function(resp) {
-                $('div#response').replaceWith(resp.data);
-            }
-        });}, 3000);
-    }); 
-});
-
-
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function() {
   'use strict';
@@ -30,3 +16,5 @@ $(document).ready(function() {
     });
   }, false);
 })();
+
+

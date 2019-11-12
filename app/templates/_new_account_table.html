@@ -1,0 +1,16 @@
+<div class="col mb-3 " id="newacc">
+    <!-- Button trigger modal start -->
+    <table class="table table-hover">
+        <tbody>
+            {% for acc in private_settings %}
+            <tr>
+                <td>{{ acc.name }}</td>
+                <td>{{ acc.exchange.name }}</td>
+                <td class="pr-0"><button type="button" class="close btn-sm float-right" id="close" data-toggle="modal" data-target="#{{ acc.name }}"><span class="oi oi-trash"></span></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Button trigger modal end -->
+</div>
+

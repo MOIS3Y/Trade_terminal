@@ -38,3 +38,7 @@ class SettingsForm(FlaskForm):
     secret_key = StringField('Secret key:', validators=[DataRequired()])
     public_key = StringField('Public key:', validators=[DataRequired()])
     submit = SubmitField('Add')
+
+# form = SettingsForm()
+# form.select.choices =[(exchange.id, exchange.name) for exchange in exchanges]
+# flash(form.select.choices)

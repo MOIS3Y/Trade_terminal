@@ -1,126 +1,143 @@
 {% extends "base.html" %}
 
+
 {% block settings %}
-
-
 <div class="container mt-5">
     <div class="row justify-content-between">
         <div class="col-md pt-3 mb-3 mr-md-3 shadow bg-white rounded">
-            <h5>User Settings</h5>
+            <h4>Trading Settings</h4>
             <hr>
         </div>
         <div class="col-md pt-3 mb-3 shadow bg-white rounded">
-            <h5>Exchange accounts</h5>
+            <h4>Exchange Settings</h4>
             <hr>
-            <div class="row">
-                <div class="col mb-3 ml-3 list-group list-group-flush" id="response">
-                    <!-- Button trigger modal -->
-                    {% for acc in privat_settings %}
-                        <a class="list-group-item list-group-item-action" data-toggle="modal" data-target="#exampleModal">{{ acc.name }}
-                        </a>      
-                    {% endfor %}
-                    
+            <div class="form-row justify-content-between">
+                <div class="col-8">
+                    <h5>Exchange accounts</h5>
                 </div>
-
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm badge badge-dark float-right" data-toggle="collapse" data-target="#collapseExchanges" aria-expanded="false" aria-controls="collapseExchanges"><span class="oi oi-elevator"></span></button>
                 </div>
-                            <h5>Add accounts</h5>
-                            <hr>
-                            <div class="form-row">
-                                <div class="col">
-                                    <form class="needs-validation" action="{{ url_for('settings') }}" method="POST" novalidate>
-                        {{ form.hidden_tag() }}
+            </div>
+            <hr>
+            <div class="row collapse show" id="collapseExchanges">
+                <div class="col mb-3 " id="newacc">
+                    <!-- Button trigger modal start -->
+                    <table class="table table-hover">
+                        <tbody>
+                            {% for acc in private_settings %}
+                            <tr>
+                                <td>{{ acc.name }}</td>
+                                <td>{{ acc.exchange.name }}</td>
+                                <td class="pr-0"><button type="button" class="close btn-sm float-right del_button" id="close" data-toggle="modal" data-target="#{{ acc.name }}" value="{{ acc.id }}"><span class="oi oi-trash"></span></button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- Button trigger modal end -->
+                </div>
+            </div>
+            <h5>Add accounts</h5>
+            <hr>
+            <div class="form-row">
+                <div class="col">
+                    <form class="needs-validation" method="POST" id="new_account">
                         <div class="form-row">
                             <div class="col">
-{#                                 <select name="exchange" class="custom-select custom-select-sm mp-sm-2" required>
-                                    <option value="">Exchanges</option>
+                                <select name="exchange" class="custom-select custom-select-sm mp-sm-2" id="exchange_id" required>
+                                    <option value="" disabled selected>Exchanges</option>
                                     {% for exchange in exchanges %}
-                                        <option value="{{ exchange.id }}">{{ exchange.name }}</option>
-                                    {% endfor %}  
+                                    <option value="{{ exchange.id }}">{{ exchange.name }}</option>
+                                    {% endfor %}
                                 </select>
-                            <div class="invalid-feedback mb-2">Change Exchange</div> #}
-                                {{ form.select(class="custom-select custom-select-sm mp-sm-2 mb-3") }}
+                                <div class="invalid-feedback mb-2">Change Exchange</div>
                             </div>
                             <div class="col">
-                                {{ form.name(class='col form-control form-control-sm mb-3', placeholder="Name") }}
+                                <input type="text" name="name" class='col form-control form-control-sm mb-3' placeholder="Name" id="name" required>
                             </div>
                         </div>
-                        {{ form.secret_key.label(class='control-label') }}
-                        {{ form.secret_key(class='form-control form-control-sm mb-3') }}
-                        <div class="invalid-feedback mb-2">Change Exchange</div>
-                        {{ form.public_key.label(class='control-label') }}
-                        {{ form.public_key(class='form-control form-control-sm mb-3') }}
-                        {{ form.submit(class="btn btn-sm btn-success mb-3", id="btn") }}
-                        {# <button class="btn btn-danger", id="btn">Update</button> #}
-
+                        <input type="text" name="secret_key" class='form-control form-control-sm mb-3' id="secret_key" placeholder="Secret Key" required>
+                        <input type="text" name="public_key" class='form-control form-control-sm mb-3' id="public_key" placeholder="Public Key" required>
+                        <button type="submit" class="btn btn-sm btn-success mb-3" id="btn-done">Add</button>
                     </form>
                 </div>
             </div>
         </div>
+        <div class="col-md-12 pt-3 mb-3 mt-md-1 shadow bg-white rounded">
+            <h4>User Settings</h4>
+            <hr>
+        </div>
     </div>
 </div>
 
-{# <p>{{ current_user.id }}</p> #}
+
+<!-- FLASK-FORM -->
+{# {{ form.select(class="custom-select custom-select-sm mp-sm-2 mb-3", id="exchange_id") }}
+{{ form.name(class='col form-control form-control-sm mb-3', placeholder="Name", id="name") }}
+{{ form.secret_key.label(class='control-label') }}
+{{ form.secret_key(class='form-control form-control-sm mb-3', id="secret_key", required='required') }}
+{{ form.public_key.label(class='control-label') }}
+{{ form.public_key(class='form-control form-control-sm mb-3', id="public_key", required='required') }}
+{{ form.submit(type="submit", class="btn btn-sm btn-success mb-3", id="btn-done") }} #}
 
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+{# <div id="acc_modal">
+{% for acc in private_settings %}
+<div class="modal fade" id="{{ acc.name }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ acc.name }} ({{ acc.exchange.name }})</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete your account?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="del_button btn btn-danger" data-dismiss="modal"  value="{{ acc.id }}" id="delete_account_{{ acc.id }}">Delete</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
-
-{# <script>
-    $(document).ready( function() { 
-        $('#next').click(function() {
-           $.ajax("{{ url_for('_update') }}").done(function (reply) {
-              $('#exacc').html(reply);
-           });
-        });
-    });
-</script> #}
-{# <script>
-    
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
-    
-</script> #}
+{% endfor %}
+</div> #}
 
 
 <!-- Optional JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="{{ url_for('static', filename='js/form.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/form.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/api.js') }}"></script>
+
+
 {% endblock %}
 
+{#               <div class="col mb-3 " id="newacc">
+              
+              <!-- Button trigger modal -->
+                  <ul class="list-group list-group-flush" >
+                    {% for acc in private_settings %}
+                    <li class="list-group-item pl-0 pr-0 ">{{ acc.name }}
+                      <button type="button" class="close btn-sm float-right"  id="close" ><span class="oi oi-trash"></span></button>
+                    </li>
+                    {% endfor %}
+                  </ul>
+              <!-- Button trigger modal -->
+              </div> #}
 
+
+{#               <div class="col mb-3 " id="newacc">
+              <!-- Button trigger modal start -->
+                  <ul class="list-group list-group-flush" >
+                    {% for acc in private_settings %}
+                    <li class="list-group-item pl-0 pr-0">{{ acc.name }} ({{ acc.exchange.name }})
+                      <button type="button" class="close btn-sm float-right"  id="close" data-toggle="modal" data-target="#{{ acc.name }}"><span class="oi oi-trash"></span></button>
+                    </li>
+                    {% endfor %}
+                  </ul>
+              <!-- Button trigger modal end -->
+              </div> #}
