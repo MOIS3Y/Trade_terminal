@@ -20,7 +20,7 @@ def index():
 @login_required
 def settings():
     exchanges = Exchange.query.all()
-    flash(exchanges)
+    # flash(exchanges)
     private_settings = PrivateSettings.query.filter_by(
         user_id=current_user.id).all()
     # flash(private_settings)
@@ -32,53 +32,34 @@ def settings():
         private_settings=private_settings)
 
 
-@app.route('/new_account', methods=['POST'])
+@app.route('/update_accounts', methods=['POST'])
 def _update():
-    new_settings = PrivateSettings(
-        user_id=current_user.id,
-        exchange_id=request.form['exchange_id'],
-        name=request.form['name'],
-        secret_key=request.form['secret_key'],
-        public_key=request.form['public_key'])
-    db.session.add(new_settings)
-    db.session.commit()
+    status = request.form['update']
+    if status == 'create_account':
+        new_settings = PrivateSettings(
+            user_id=current_user.id,
+            exchange_id=request.form['exchange_id'],
+            name=request.form['name'],
+            secret_key=request.form['secret_key'],
+            public_key=request.form['public_key'])
+        db.session.add(new_settings)
+        db.session.commit()
+    if status == 'delete_account':
+        id_account = str(request.form['id_account'])
+        delete_account = PrivateSettings.query.filter_by(
+            id=id_account).first()
+        db.session.delete(delete_account)
+        db.session.commit()
+
     private_settings = PrivateSettings.query.filter_by(
         user_id=current_user.id).all()
     return jsonify(
         {
-            'newacc': render_template(
-                '_new_account_table.html', private_settings=private_settings),
-            # 'acc_modal': render_template(
-            #     '_new_account_modal.html', private_settings=private_settings),
-            'status': 'OK'
+            'accounts': render_template(
+                '_update_account_table.html',
+                private_settings=private_settings),
+            'status': status
         })
-
-
-@app.route('/delete_account', methods=['POST'])
-def _delete():
-    # id_account = request.form['id_account']
-    delete_account = PrivateSettings.query.filter_by(
-        id=request.form['id_account']).first()
-    delete = db.session.delete(delete_account)
-    delete = db.session.commit()
-    private_settings = PrivateSettings.query.filter_by(
-        user_id=current_user.id).all()
-
-    return jsonify(
-        {
-            'newacc': render_template(
-                '_new_account_table.html', private_settings=private_settings),
-            # 'acc_modal': render_template(
-            #     '_new_account_modal.html', private_settings=private_settings),
-            'status': 'OK',
-            'data': str(render_template('_new_account_table.html', private_settings=private_settings))
-        })
-
-
-    # return jsonify({'data': str(delete_account)})
-
-    # return jsonify({'data': render_template(
-    #     'test.html', private_settings=private_settings)})
 
 
 @app.route('/login', methods=['GET', 'POST'])

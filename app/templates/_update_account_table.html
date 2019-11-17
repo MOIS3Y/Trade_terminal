@@ -1,0 +1,13 @@
+<table class="table table-hover" id="accounts_table">
+    <tbody>
+        {% for acc in private_settings %}
+        <tr>
+            <td>{{ acc.name }}</td>
+            <td>{{ acc.exchange.name }}</td>
+            <!-- Button trigger modal start -->
+            <td class="pr-0"><button type="button" class="close btn-sm float-right del_button" id="close" data-toggle="modal" data-target="#confirmation_del" data-whatever="{{ acc.name }} ({{ acc.exchange.name }})" value="{{ acc.id }}"><span class="oi oi-trash"></span></button></td>
+            <!-- Button trigger modal end -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
